@@ -1,0 +1,23 @@
+"Format tanggal bawaan Laravel"
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"Struktur data Pasien"
+type Patient {
+    id: ID!
+    nik: String!
+    name: String!
+    birth_date: String!
+    gender: String!
+    address: String
+    medical_history: String
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Query {
+    "Mengambil daftar seluruh pasien (mirip Collection GET /api/v1/patients)"
+    patients: [Patient!]! @all
+    
+    "Mengambil detail data pasien berdasarkan ID (mirip Resource GET /api/v1/patients/{id})"
+    patient(id: ID @eq): Patient @find
+}

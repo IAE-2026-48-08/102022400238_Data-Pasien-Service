@@ -1,0 +1,139 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Service Data Pasien API",
+        "description": "API Documentation untuk Service Data Pasien E-Healthcare",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/patients": {
+            "get": {
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Mengambil daftar seluruh pasien",
+                "operationId": "getPatients",
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data"
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Menambahkan data pasien baru",
+                "operationId": "storePatient",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nik",
+                                    "name",
+                                    "birth_date",
+                                    "gender"
+                                ],
+                                "properties": {
+                                    "nik": {
+                                        "type": "string",
+                                        "example": "3201010101010001"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Budi Santoso"
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-05-15"
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "example": "Laki-laki"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Jl. Telekomunikasi No. 1, Bandung"
+                                    },
+                                    "medical_history": {
+                                        "type": "string",
+                                        "example": "Alergi debu"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Data berhasil ditambahkan"
+                    },
+                    "400": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/patients/{id}": {
+            "get": {
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Mengambil detail data pasien berdasarkan ID",
+                "operationId": "getPatientById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data"
+                    },
+                    "404": {
+                        "description": "Data pasien tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "name": "X-IAE-KEY",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Patients",
+            "description": "Patients"
+        }
+    ]
+}
