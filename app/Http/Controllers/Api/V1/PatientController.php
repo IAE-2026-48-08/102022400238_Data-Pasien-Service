@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api\V1;
+use App\Services\IaeCloudService;
 
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
@@ -87,8 +88,10 @@ class PatientController extends Controller
     )]
     #[OA\Response(response: 201, description: "Data berhasil ditambahkan")]
     #[OA\Response(response: 400, description: "Validasi gagal")]
+
     public function store(Request $request)
     {
+        // 1. Validasi Input Data
         $validator = Validator::make($request->all(), [
             'nik' => 'required|string|max:16|unique:patients',
             'name' => 'required|string|max:255',
@@ -102,8 +105,35 @@ class PatientController extends Controller
             return $this->errorResponse('Validasi gagal', 400, $validator->errors());
         }
 
+        // 2. Simpan Data ke Database Lokal
         $patient = Patient::create($request->all());
 
-        return $this->successResponse($patient, 'Data pasien baru berhasil ditambahkan.', 201);
+        // --- MULAI INTEGRASI CLOUD DOSEN ---
+        $cloudService = new IaeCloudService();
+
+        // 3. Kirim Audit Log ke SOAP Dosen
+        // Mengubah data ke array agar mudah di-encode menjadi format yang diminta dosen
+        $soapResponse = $cloudService->sendSoapAudit('PatientCreated', $patient->toArray());
+
+        // 4. Broadcast Pengumuman ke RabbitMQ Dosen
+        // Mengirimkan notifikasi ke iae.central.exchange agar diketahui departemen lain
+        $rabbitPayload = [
+            'event' => 'PatientCreated',
+            'message' => 'Pasien baru telah terdaftar di sistem.',
+            'data' => $patient->toArray()
+        ];
+        $rabbitResponse = $cloudService->publishRabbitMQ('patient.created', $rabbitPayload);
+        // --- SELESAI INTEGRASI ---
+
+        // 5. Kembalikan Response Akhir (beserta bukti resi dan status cloud)
+        return response()->json([
+            'success' => true,
+            'message' => 'Data pasien baru berhasil ditambahkan dan disinkronisasi ke Cloud Dosen.',
+            'data' => $patient,
+            'cloud_sync_status' => [
+                'soap_audit' => $soapResponse,
+                'rabbitmq_broadcast' => $rabbitResponse
+            ]
+        ], 201);
     }
 }

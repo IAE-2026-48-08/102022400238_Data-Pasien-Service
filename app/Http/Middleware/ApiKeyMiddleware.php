@@ -14,7 +14,7 @@ class ApiKeyMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // GANTI '1234567890' DI BAWAH INI DENGAN NIM KAMU SENDIRI
-        $expectedKey = '102022400238'; 
+        $expectedKey = 'KEY-MHS-279';; 
         $providedKey = $request->header('X-IAE-KEY');
 
         if (!$providedKey || $providedKey !== $expectedKey) {
