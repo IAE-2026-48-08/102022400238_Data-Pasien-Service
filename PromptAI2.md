@@ -5,7 +5,7 @@
 **Kelompok:** 13 (E-Healthcare)  
 **Fokus Service:** Service Data Pasien  
 
----
+
 
 ## 1. Tahap Inisiasi Proyek
 **Prompt Pengguna:**
@@ -19,7 +19,7 @@ Menyusun rencana eksekusi menjadi 5 langkah utama:
 4. Routing & Controller REST API.
 5. Instalasi & Konfigurasi Swagger (Dokumentasi) dan GraphQL.
 
----
+
 
 ## 2. Pembuatan Migration & Model
 **Prompt Pengguna:**
@@ -32,7 +32,7 @@ Memberikan perintah `php artisan make:model Patient -m` dan struktur tabel untuk
 * **Error:** `Could not open input file: artisan`
 * **Solusi:** AI mengarahkan pengguna untuk masuk ke dalam direktori *project* menggunakan perintah `cd data-pasien-service` sebelum menjalankan perintah artisan.
 
----
+
 
 ## 3. Standardisasi Format Respon (Wrapper)
 **Prompt Pengguna:**
@@ -66,7 +66,7 @@ Mengarahkan pembuatan `PatientController` yang mencakup 3 jenis *endpoint* wajib
 * **Error:** Saat men- *setup* `routes/api.php`, file default terisi dengan route Sanctum bawaan Laravel 11.
 * **Solusi:** AI menginstruksikan untuk menghapus rute *default* dan menggantinya dengan rute Service Data Pasien yang diproteksi oleh *middleware* `api.key`.
 
----
+
 
 ## 6. Instalasi Swagger / OpenAPI Documentation
 **Prompt Pengguna:**
@@ -79,7 +79,7 @@ Memberikan langkah instalasi `darkaonline/l5-swagger` untuk memunculkan UI dokum
 * **Error:** Saat melakukan *generate* dokumentasi, muncul peringatan `Required @OA\Info() not found` pada terminal.
 * **Solusi:** AI mengubah implementasi anotasi DocBlock lama menjadi **PHP Attributes** (`#[OA\Info...]`) pada `PatientController` untuk menyesuaikan dengan arsitektur Laravel 11. Setelah cache dibersihkan (`config:clear` dan `route:clear`), Swagger berhasil di-*generate*.
 
----
+
 
 ## 7. Pengujian (Testing) REST API via Swagger
 **Prompt Pengguna:**
@@ -91,14 +91,11 @@ Menganalisis *error* dan menemukan bahwa keamanan Header `X-IAE-KEY` sudah berha
 **Prompt Pengguna:**
 > "[Melampirkan Screenshot pengujian POST (201 Created) dan GET Collection (200 OK)]"
 
-**Respon AI:**
+
 Mengonfirmasi bahwa seluruh fungsionalitas REST API sudah berjalan 100% sempurna dan memenuhi kriteria rubrik tugas.
 
----
 
 ## 8. Implementasi GraphQL
 **Respon AI:**
 Sebagai penutup fungsionalitas, AI memberikan perintah instalasi `nuwave/lighthouse` dan `mll-lab/laravel-graphql-playground`. Dilanjutkan dengan pendefinisian `schema.graphql` untuk memungkinkan klien melakukan *query* pengambilan daftar pasien dan detail pasien menggunakan antarmuka interaktif GraphQL Playground.
 
----
-*Log ini di-generate sebagai bukti implementasi prompting AI pada Tugas 2 IAE.*
