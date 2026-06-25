@@ -5,6 +5,6 @@ services:
     container_name: data-pasien-service
     ports:
       - "8001:8000"
-    # volumes:       <-- PASTIKAN INI DI-KOMENTARI/DIBERI #
-    #   - .:/app
+    # volumes:       <-- PASTIKAN INI DIBERI TANDA PAGAR (#)
+    #   - .:/app     <-- INI JUGA
     working_dir: /app
