@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  data-pasien-app:
+    image: bitnami/laravel:latest
+    container_name: data-pasien-service
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=sqlite
