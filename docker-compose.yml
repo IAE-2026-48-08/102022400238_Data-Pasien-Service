@@ -1,10 +1,11 @@
 version: '3.8'
 services:
   data-pasien-app:
-    image: php:8.2-cli
+    build: .                           
+    # image: php:8.2-cli               
     container_name: data-pasien-service
     ports:
       - "8001:8000"
-    # volumes:       <-- PASTIKAN INI DIBERI TANDA PAGAR (#)
-    #   - .:/app     <-- INI JUGA
+    # volumes:       
+    #   - .:/app     
     working_dir: /app

@@ -12,6 +12,6 @@ COPY . .
 
 # 5. Otomatis buatkan file .env untuk memenuhi syarat grader
 RUN cp .env.example .env
-
+RUN php artisan key:generate
 # 6. Nyalakan server Laravel saat mesin Docker dihidupkan
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
