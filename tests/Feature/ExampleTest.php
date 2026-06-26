@@ -64,11 +64,15 @@ class ExampleTest extends TestCase
 
     public function test_swagger_documents_rest_endpoints(): void
     {
+        $this->get('/api/documentation')
+            ->assertOk();
+
         $response = $this->getJson('/docs')
             ->assertOk();
 
         $paths = $response->json('paths');
 
+        $this->assertSame('http://localhost:8001', $response->json('servers.0.url'));
         $this->assertArrayHasKey('/api/v1', $paths);
         $this->assertArrayHasKey('get', $paths['/api/v1']);
         $this->assertArrayHasKey('post', $paths['/api/v1']);
@@ -78,11 +82,20 @@ class ExampleTest extends TestCase
 
     public function test_graphql_patients_query_works(): void
     {
+        $this->get('/graphql-playground')
+            ->assertOk();
+
         $response = $this->postJson('/graphql', [
             'query' => '{ patients { id nik name birth_date gender } }',
         ])->assertOk();
 
         $this->assertArrayNotHasKey('errors', $response->json());
         $this->assertSame([], $response->json('data.patients'));
+
+        $introspection = $this->postJson('/graphql', [
+            'query' => '{ __schema { queryType { name } } }',
+        ])->assertOk();
+
+        $this->assertSame('Query', $introspection->json('data.__schema.queryType.name'));
     }
 }

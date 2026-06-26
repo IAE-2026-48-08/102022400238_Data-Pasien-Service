@@ -5,6 +5,12 @@
         "description": "API Documentation untuk Service Data Pasien E-Healthcare",
         "version": "1.0.0"
     },
+    "servers": [
+        {
+            "url": "http://localhost:8001",
+            "description": "Local Docker server"
+        }
+    ],
     "paths": {
         "/api/v1": {
             "get": {
