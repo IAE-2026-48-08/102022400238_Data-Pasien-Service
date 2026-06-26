@@ -70,9 +70,13 @@ class ExampleTest extends TestCase
         $response = $this->getJson('/docs')
             ->assertOk();
 
+        $openApiAlias = $this->getJson('/openapi.json')
+            ->assertOk();
+
         $paths = $response->json('paths');
 
         $this->assertSame('http://localhost:8001', $response->json('servers.0.url'));
+        $this->assertSame('http://localhost:8001', $openApiAlias->json('servers.0.url'));
         $this->assertArrayHasKey('/api/v1', $paths);
         $this->assertArrayHasKey('get', $paths['/api/v1']);
         $this->assertArrayHasKey('post', $paths['/api/v1']);

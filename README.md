@@ -35,7 +35,7 @@ Semua respons REST memakai wrapper:
 
 ```text
 Swagger UI: /api/documentation
-OpenAPI JSON: /docs
+OpenAPI JSON: /docs atau /openapi.json
 GraphQL endpoint: /graphql
 GraphQL Playground: /graphql-playground
 ```
