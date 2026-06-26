@@ -63,8 +63,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 Catatan Keamanan (Middleware):
 Seluruh endpoint API (kecuali dokumentasi Swagger) dilindungi oleh API Key. Saat menguji di Swagger atau Postman, pastikan untuk memasukkan kunci berikut pada header otentikasi:
 Key: X-IAE-KEY
-Value: KEY-MHS-279
-
+Value: 102022400238
 
 
 

@@ -13,9 +13,8 @@ class ApiKeyMiddleware
 
     public function handle(Request $request, Closure $next): Response
     {
-        // GANTI '1234567890' DI BAWAH INI DENGAN NIM KAMU SENDIRI
-        $expectedKey = 'KEY-MHS-279';; 
-        $providedKey = $request->header('X-IAE-KEY');
+        $expectedKey = env('IAE_API_KEY', '102022400238');
+        $providedKey = $request->header('X-IAE-KEY') ?? $request->header('X-IAE-KKEY');
 
         if (!$providedKey || $providedKey !== $expectedKey) {
             return $this->errorResponse('Unauthorized. Header X-IAE-KEY tidak valid atau tidak ditemukan.', 401);

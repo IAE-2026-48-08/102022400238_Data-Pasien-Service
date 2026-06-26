@@ -21,7 +21,7 @@ class IaeCloudService
     {
         try {
             // Tambahkan withoutVerifying() untuk mem-bypass error SSL bawaan Windows
-            $response = Http::withoutVerifying()->post($this->baseUrl . '/api/v1/auth/token', [
+            $response = Http::withoutVerifying()->timeout(5)->post($this->baseUrl . '/api/v1/auth/token', [
     'api_key' => env('IAE_API_KEY'),
     'nim' => '102022400238'
     ]);
@@ -68,6 +68,7 @@ class IaeCloudService
         try {
             // Gunakan withBody() agar Laravel mengirimnya sebagai XML murni, bukan form-data
             $response = Http::withoutVerifying()
+                ->timeout(5)
                 ->withToken($token)
                 ->withBody($xmlBody, 'text/xml')
                 ->post($this->baseUrl . '/soap/v1/audit');
@@ -100,6 +101,7 @@ class IaeCloudService
         try {
             // 2. Tembak ke endpoint RabbitMQ dosen dengan payload JSON
             $response = Http::withoutVerifying()
+                ->timeout(5)
                 ->withToken($token)
                 ->post($this->baseUrl . '/api/v1/messages/publish', [
                     'routing_key' => $routingKey,

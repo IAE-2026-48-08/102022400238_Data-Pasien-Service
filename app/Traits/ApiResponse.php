@@ -10,6 +10,7 @@ trait ApiResponse
             'status' => 'success',
             'message' => $message,
             'data' => $data,
+            'errors' => null,
             'meta' => array_merge([
                 'service_name' => 'Service Data Pasien',
                 'api_version' => 'v1'
@@ -24,11 +25,9 @@ trait ApiResponse
         $response = [
             'status' => 'error',
             'message' => $message,
+            'data' => null,
+            'errors' => $errors,
         ];
-
-        if (!is_null($errors)) {
-            $response['errors'] = $errors;
-        }
 
         return response()->json($response, $code);
     }

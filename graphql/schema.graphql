@@ -16,8 +16,8 @@ type Patient {
 
 type Query {
     "Mengambil daftar seluruh pasien (mirip Collection GET /api/v1/patients)"
-    patients: [Patient!]! @all
+    patients: [Patient!]! @all(model: "App\\Models\\Patient")
     
     "Mengambil detail data pasien berdasarkan ID (mirip Resource GET /api/v1/patients/{id})"
-    patient(id: ID @eq): Patient @find
+    patient(id: ID! @eq): Patient @find(model: "App\\Models\\Patient")
 }

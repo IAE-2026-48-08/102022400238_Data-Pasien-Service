@@ -1,17 +1,24 @@
-# 1. Ambil mesin dasar PHP versi 8.2
 FROM php:8.2-cli
 
-# 2. Install perlengkapan tambahan yang dibutuhkan Laravel
-RUN apt-get update && apt-get install -y libzip-dev zip git
+RUN apt-get update \
+    && apt-get install -y libzip-dev libsqlite3-dev unzip git \
+    && docker-php-ext-install pdo_mysql pdo_sqlite zip \
+    && rm -rf /var/lib/apt/lists/*
 
-# 3. Buat folder bernama /app di dalam Docker sebagai tempat kerja utama
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 WORKDIR /app
 
-# 4. Salin SEMUA file kodinganmu dari laptop ke dalam mesin Docker
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --optimize-autoloader --no-interaction --no-progress
+
 COPY . .
 
-# 5. Otomatis buatkan file .env untuk memenuhi syarat grader
-RUN cp .env.example .env
-RUN php artisan key:generate
-# 6. Nyalakan server Laravel saat mesin Docker dihidupkan
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+RUN composer dump-autoload --optimize \
+    && if [ ! -f .env ]; then cp .env.example .env; fi \
+    && touch database/database.sqlite \
+    && php artisan key:generate --force \
+    && php artisan migrate --force \
+    && php artisan l5-swagger:generate
+
+CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]

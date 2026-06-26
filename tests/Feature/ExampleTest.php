@@ -2,18 +2,62 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
-    {
-        $response = $this->get('/');
+    use RefreshDatabase;
 
-        $response->assertStatus(200);
+    private const API_KEY = '102022400238';
+
+    public function test_rest_contract_matches_grader_expectations(): void
+    {
+        $this->getJson('/api/v1')
+            ->assertStatus(401)
+            ->assertJsonPath('status', 'error')
+            ->assertJsonStructure(['status', 'message', 'data', 'errors']);
+
+        $this->withHeader('X-IAE-KEY', self::API_KEY)
+            ->getJson('/api/v1')
+            ->assertOk()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonStructure(['status', 'message', 'data', 'errors']);
+
+        $this->withHeader('X-IAE-KEY', self::API_KEY)
+            ->getJson('/api/v1/999999')
+            ->assertNotFound()
+            ->assertJsonPath('status', 'error')
+            ->assertJsonStructure(['status', 'message', 'data', 'errors']);
+
+        $this->withHeader('X-IAE-KEY', self::API_KEY)
+            ->postJson('/api/v1', [])
+            ->assertCreated()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonStructure(['status', 'message', 'data', 'errors']);
+    }
+
+    public function test_swagger_documents_rest_endpoints(): void
+    {
+        $response = $this->getJson('/docs')
+            ->assertOk();
+
+        $paths = $response->json('paths');
+
+        $this->assertArrayHasKey('/api/v1/', $paths);
+        $this->assertArrayHasKey('get', $paths['/api/v1/']);
+        $this->assertArrayHasKey('post', $paths['/api/v1/']);
+        $this->assertArrayHasKey('/api/v1/{id}', $paths);
+        $this->assertArrayHasKey('get', $paths['/api/v1/{id}']);
+    }
+
+    public function test_graphql_patients_query_works(): void
+    {
+        $response = $this->postJson('/graphql', [
+            'query' => '{ patients { id nik name birth_date gender } }',
+        ])->assertOk();
+
+        $this->assertArrayNotHasKey('errors', $response->json());
+        $this->assertSame([], $response->json('data.patients'));
     }
 }

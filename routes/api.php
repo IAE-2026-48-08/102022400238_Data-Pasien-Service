@@ -18,9 +18,13 @@ use App\Services\IaeCloudService;
 
 // Route utama untuk Service Data Pasien
 Route::prefix('v1')->middleware('api.key')->group(function () {
-    Route::get('/patients', [PatientController::class, 'index']);      // Collection: Ambil semua data
-    Route::get('/patients/{id}', [PatientController::class, 'show']);  // Resource: Ambil detail data
-    Route::post('/patients', [PatientController::class, 'store']);     // Action: Tambah data pasien
+    Route::get('/', [PatientController::class, 'index']);
+    Route::post('/', [PatientController::class, 'store']);
+    Route::get('/{id}', [PatientController::class, 'show'])->whereNumber('id');
+
+    Route::get('/patients', [PatientController::class, 'index']);
+    Route::post('/patients', [PatientController::class, 'store']);
+    Route::get('/patients/{id}', [PatientController::class, 'show'])->whereNumber('id');
 });
 
 // Route rahasia untuk tes ambil token SSO Dosen
