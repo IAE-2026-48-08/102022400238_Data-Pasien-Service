@@ -49,6 +49,13 @@ class PatientController extends Controller
         security: [["ApiKeyAuth" => []]],
         tags: ["Patients"]
     )]
+    #[OA\Get(
+        path: "/api/v1/patients",
+        operationId: "getPatientsResource",
+        summary: "Mengambil daftar seluruh pasien",
+        security: [["ApiKeyAuth" => []]],
+        tags: ["Patients"]
+    )]
     #[OA\Response(
         response: 200,
         description: "Berhasil mengambil data",
@@ -71,6 +78,13 @@ class PatientController extends Controller
     #[OA\Get(
         path: "/api/v1/{id}",
         operationId: "getPatientById",
+        summary: "Mengambil detail data pasien berdasarkan ID",
+        security: [["ApiKeyAuth" => []]],
+        tags: ["Patients"]
+    )]
+    #[OA\Get(
+        path: "/api/v1/patients/{id}",
+        operationId: "getPatientResourceById",
         summary: "Mengambil detail data pasien berdasarkan ID",
         security: [["ApiKeyAuth" => []]],
         tags: ["Patients"]
@@ -121,6 +135,13 @@ class PatientController extends Controller
     #[OA\Post(
         path: "/api/v1",
         operationId: "storePatient",
+        summary: "Menambahkan data pasien baru",
+        security: [["ApiKeyAuth" => []]],
+        tags: ["Patients"]
+    )]
+    #[OA\Post(
+        path: "/api/v1/patients",
+        operationId: "storePatientResource",
         summary: "Menambahkan data pasien baru",
         security: [["ApiKeyAuth" => []]],
         tags: ["Patients"]

@@ -136,6 +136,130 @@
                 ]
             }
         },
+        "/api/v1/patients": {
+            "get": {
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Mengambil daftar seluruh pasien",
+                "operationId": "getPatientsResource",
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Daftar seluruh data pasien berhasil diambil."
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Patient"
+                                            }
+                                        },
+                                        "errors": {
+                                            "example": null,
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Menambahkan data pasien baru",
+                "operationId": "storePatientResource",
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nik": {
+                                        "type": "string",
+                                        "example": "3201010101010001"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Budi Santoso"
+                                    },
+                                    "birth_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-05-15"
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "example": "Laki-laki"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Jl. Telekomunikasi No. 1, Bandung"
+                                    },
+                                    "medical_history": {
+                                        "type": "string",
+                                        "example": "Alergi debu"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Data berhasil ditambahkan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data pasien baru berhasil ditambahkan."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "errors": {
+                                            "example": null,
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/{id}": {
             "get": {
                 "tags": [
@@ -143,6 +267,87 @@
                 ],
                 "summary": "Mengambil detail data pasien berdasarkan ID",
                 "operationId": "getPatientById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Detail data pasien berhasil diambil."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Patient"
+                                        },
+                                        "errors": {
+                                            "example": null,
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data pasien tidak ditemukan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data pasien tidak ditemukan."
+                                        },
+                                        "data": {
+                                            "example": null,
+                                            "nullable": true
+                                        },
+                                        "errors": {
+                                            "example": null,
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/patients/{id}": {
+            "get": {
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Mengambil detail data pasien berdasarkan ID",
+                "operationId": "getPatientResourceById",
                 "parameters": [
                     {
                         "name": "id",

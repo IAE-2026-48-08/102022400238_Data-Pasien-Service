@@ -82,6 +82,11 @@ class ExampleTest extends TestCase
         $this->assertArrayHasKey('post', $paths['/api/v1']);
         $this->assertArrayHasKey('/api/v1/{id}', $paths);
         $this->assertArrayHasKey('get', $paths['/api/v1/{id}']);
+        $this->assertArrayHasKey('/api/v1/patients', $paths);
+        $this->assertArrayHasKey('get', $paths['/api/v1/patients']);
+        $this->assertArrayHasKey('post', $paths['/api/v1/patients']);
+        $this->assertArrayHasKey('/api/v1/patients/{id}', $paths);
+        $this->assertArrayHasKey('get', $paths['/api/v1/patients/{id}']);
     }
 
     public function test_graphql_patients_query_works(): void
