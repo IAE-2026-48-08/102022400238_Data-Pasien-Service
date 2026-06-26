@@ -7,7 +7,11 @@ Route::get('/', function () {
 });
 
 Route::get('/openapi.json', function () {
-    return response(file_get_contents(storage_path('api-docs/api-docs.json')), 200, [
+    $path = storage_path('api-docs/api-docs.json');
+
+    abort_unless(file_exists($path), 404);
+
+    return response(file_get_contents($path), 200, [
         'Content-Type' => 'application/json',
     ]);
 });
