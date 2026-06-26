@@ -16,8 +16,12 @@ class ApiKeyMiddleware
         $expectedKey = env('IAE_API_KEY', '102022400238');
         $providedKey = $request->header('X-IAE-KEY') ?? $request->header('X-IAE-KKEY');
 
-        if (!$providedKey || $providedKey !== $expectedKey) {
-            return $this->errorResponse('Unauthorized. Header X-IAE-KEY tidak valid atau tidak ditemukan.', 401);
+        if (!$providedKey) {
+            return $this->errorResponse('Unauthorized. Header X-IAE-KEY tidak ditemukan.', 401);
+        }
+
+        if ($providedKey !== $expectedKey) {
+            return $this->errorResponse('Forbidden. Header X-IAE-KEY tidak valid.', 403);
         }
 
         return $next($request);

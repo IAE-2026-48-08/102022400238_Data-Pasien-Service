@@ -39,7 +39,7 @@ class PatientController extends Controller
     use ApiResponse;
 
     #[OA\Get(
-        path: "/api/v1/",
+        path: "/api/v1",
         operationId: "getPatients",
         summary: "Mengambil daftar seluruh pasien",
         security: [["ApiKeyAuth" => []]],
@@ -115,7 +115,7 @@ class PatientController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/v1/",
+        path: "/api/v1",
         operationId: "storePatient",
         summary: "Menambahkan data pasien baru",
         security: [["ApiKeyAuth" => []]],
@@ -157,6 +157,29 @@ class PatientController extends Controller
             'patient' => $patient,
             'cloud_sync_status' => $cloudStatus,
         ], 'Data pasien baru berhasil ditambahkan.', 201);
+    }
+
+    public function fallback(Request $request, ?string $any = null)
+    {
+        $path = trim((string) $any, '/');
+
+        if ($path === '') {
+            if ($request->isMethod('get')) {
+                return $this->index();
+            }
+
+            if ($request->isMethod('post')) {
+                return $this->store($request);
+            }
+
+            return $this->errorResponse('Method tidak diizinkan untuk endpoint ini.', 405);
+        }
+
+        if ($request->isMethod('get') && ctype_digit($path)) {
+            return $this->show($path);
+        }
+
+        return $this->errorResponse('Endpoint tidak ditemukan.', 404);
     }
 
     private function patientPayload(Request $request): array

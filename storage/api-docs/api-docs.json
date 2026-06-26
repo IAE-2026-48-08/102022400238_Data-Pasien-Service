@@ -6,7 +6,7 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/v1/": {
+        "/api/v1": {
             "get": {
                 "tags": [
                     "Patients"

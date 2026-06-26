@@ -18,10 +18,23 @@ class ExampleTest extends TestCase
             ->assertJsonPath('status', 'error')
             ->assertJsonStructure(['status', 'message', 'data', 'errors']);
 
+        $this->withHeader('X-IAE-KEY', 'salah')
+            ->getJson('/api/v1')
+            ->assertForbidden()
+            ->assertJsonPath('status', 'error')
+            ->assertJsonStructure(['status', 'message', 'data', 'errors']);
+
         $this->withHeader('X-IAE-KEY', self::API_KEY)
             ->getJson('/api/v1')
             ->assertOk()
             ->assertJsonPath('status', 'success')
+            ->assertJsonStructure(['status', 'message', 'data', 'errors']);
+
+        $this->withHeader('X-IAE-KEY', self::API_KEY)
+            ->getJson('/api/v1/')
+            ->assertOk()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonMissingPath('meta')
             ->assertJsonStructure(['status', 'message', 'data', 'errors']);
 
         $this->withHeader('X-IAE-KEY', self::API_KEY)
@@ -35,6 +48,18 @@ class ExampleTest extends TestCase
             ->assertCreated()
             ->assertJsonPath('status', 'success')
             ->assertJsonStructure(['status', 'message', 'data', 'errors']);
+
+        $this->withHeader('X-IAE-KEY', self::API_KEY)
+            ->getJson('/api/v1/path-ngawur')
+            ->assertNotFound()
+            ->assertJsonPath('status', 'error')
+            ->assertJsonStructure(['status', 'message', 'data', 'errors']);
+
+        $this->withHeader('X-IAE-KEY', self::API_KEY)
+            ->putJson('/api/v1', [])
+            ->assertStatus(405)
+            ->assertJsonPath('status', 'error')
+            ->assertJsonStructure(['status', 'message', 'data', 'errors']);
     }
 
     public function test_swagger_documents_rest_endpoints(): void
@@ -44,9 +69,9 @@ class ExampleTest extends TestCase
 
         $paths = $response->json('paths');
 
-        $this->assertArrayHasKey('/api/v1/', $paths);
-        $this->assertArrayHasKey('get', $paths['/api/v1/']);
-        $this->assertArrayHasKey('post', $paths['/api/v1/']);
+        $this->assertArrayHasKey('/api/v1', $paths);
+        $this->assertArrayHasKey('get', $paths['/api/v1']);
+        $this->assertArrayHasKey('post', $paths['/api/v1']);
         $this->assertArrayHasKey('/api/v1/{id}', $paths);
         $this->assertArrayHasKey('get', $paths['/api/v1/{id}']);
     }

@@ -4,17 +4,13 @@ namespace App\Traits;
 
 trait ApiResponse
 {
-    protected function successResponse($data, $message = 'Data retrieved successfully', $code = 200, $meta = [])
+    protected function successResponse($data, $message = 'Data retrieved successfully', $code = 200)
     {
         $response = [
             'status' => 'success',
             'message' => $message,
             'data' => $data,
             'errors' => null,
-            'meta' => array_merge([
-                'service_name' => 'Service Data Pasien',
-                'api_version' => 'v1'
-            ], $meta)
         ];
 
         return response()->json($response, $code);

@@ -17,14 +17,16 @@ use App\Services\IaeCloudService;
 // })->middleware('auth:sanctum');
 
 // Route utama untuk Service Data Pasien
-Route::prefix('v1')->middleware('api.key')->group(function () {
-    Route::get('/', [PatientController::class, 'index']);
-    Route::post('/', [PatientController::class, 'store']);
-    Route::get('/{id}', [PatientController::class, 'show'])->whereNumber('id');
+Route::middleware('api.key')->group(function () {
+    Route::get('v1', [PatientController::class, 'index']);
+    Route::post('v1', [PatientController::class, 'store']);
+    Route::get('v1/{id}', [PatientController::class, 'show'])->whereNumber('id');
 
-    Route::get('/patients', [PatientController::class, 'index']);
-    Route::post('/patients', [PatientController::class, 'store']);
-    Route::get('/patients/{id}', [PatientController::class, 'show'])->whereNumber('id');
+    Route::get('v1/patients', [PatientController::class, 'index']);
+    Route::post('v1/patients', [PatientController::class, 'store']);
+    Route::get('v1/patients/{id}', [PatientController::class, 'show'])->whereNumber('id');
+
+    Route::any('v1/{any?}', [PatientController::class, 'fallback'])->where('any', '.*');
 });
 
 // Route rahasia untuk tes ambil token SSO Dosen
